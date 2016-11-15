@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="rulers">
         <attr name="blockColor" format="color"/>
+        <attr name="selectedBlockColor" format="color"/>
         <attr name="textSize" format="integer"/>
     </declare-styleable>
 </resources>

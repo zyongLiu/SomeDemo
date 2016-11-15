@@ -23,6 +23,7 @@
         <activity android:name=".activity.RxJavaActivity"/>
         <activity android:name=".activity.RxReActivity" />
         <activity android:name=".activity.OkhttpActivity"/>
+        <activity android:name=".activity.RulersViewActivity"/>
     </application>
 
 </manifest>

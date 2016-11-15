@@ -19,7 +19,8 @@ import com.example.administrator.testsurfaceview.R;
  */
 public class MainActivity extends Activity{
     private ListView lv;
-    private String[] datas=new String[]{"Pulgin","SurfaceView","Touch","RetrofitActivity","RxJavaActivity","RxJava + Retrofit","Okhttp"};
+    private String[] datas=new String[]{"Pulgin","SurfaceView","Touch","RetrofitActivity",
+            "RxJavaActivity","RxJava + Retrofit","Okhttp","RulersViewActivity"};
     private MainAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,9 @@ public class MainActivity extends Activity{
                         break;
                     case 6:
                         intent=new Intent(getApplicationContext(),OkhttpActivity.class);
+                        break;
+                    case 7:
+                        intent=new Intent(getApplicationContext(),RulersViewActivity.class);
                         break;
                     default:
 
