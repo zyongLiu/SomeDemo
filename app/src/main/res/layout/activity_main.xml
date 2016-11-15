@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SurfaceViewActivity">
+
+    <ScrollView
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.example.administrator.testsurfaceview.view.RulersView
+            android:layout_width="300dp"
+            android:layout_height="400dp" />
+    </ScrollView>
+
+    <com.example.administrator.testsurfaceview.view.DynamicWeatherView
+        android:id="@+id/dyview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
+    <com.example.administrator.testsurfaceview.view.MyTestView
+        android:id="@+id/mytextview"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:background="#020000" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onclick"
+        android:text="change"
+        android:visibility="gone" />
+
+    <com.example.administrator.testsurfaceview.view.MySurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+</RelativeLayout>

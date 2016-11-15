@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="rulers">
+        <attr name="blockColor" format="color"/>
+        <attr name="textSize" format="integer"/>
+    </declare-styleable>
+</resources>
