@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.administrator.testsurfaceview">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name="com.morgoo.droidplugin.PluginApplication"
         android:allowBackup="true"
@@ -24,6 +26,8 @@
         <activity android:name=".activity.RxReActivity" />
         <activity android:name=".activity.OkhttpActivity"/>
         <activity android:name=".activity.RulersViewActivity"/>
+        <activity android:name=".activity.ScrollActivitiy"/>
+        <activity android:name=".activity.VerticalViewPagerActivity"/>
     </application>
 
 </manifest>

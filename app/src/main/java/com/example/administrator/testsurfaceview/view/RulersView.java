@@ -19,14 +19,14 @@ import android.widget.Scroller;
 import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.bean.Block;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
-
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * 自定义刻度尺
+ * Don't put it directly in RelativeLayout，if you must do，you can
+ * put in into FlameLayout,and then put the FlameLayout into RealtiveLayout.
  * Created by Liu on 2016/10/28.
  */
 public class RulersView extends View implements GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
@@ -83,7 +83,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
 
     private RulersValueFormatter rulersValueFormatter;
 
-    private OverScroller mScroller;
+//    private OverScroller mScroller;
 
     public interface OnRainChunkClickListener {
         void onClick(int position, Block block);
@@ -127,7 +127,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
      */
     public void setBlocks(List<Block> blocks) {
         this.blocks = blocks;
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -140,7 +140,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
             blocks = new ArrayList<>();
         }
         blocks.add(block);
-        postInvalidate();
+        invalidate();
     }
 
     /**
@@ -153,7 +153,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
             blocks = new ArrayList<>();
         }
         blocks.addAll(blocks);
-        postInvalidate();
+        invalidate();
     }
 
     public void setBigandSmallCount(int bigCount, int smallCount) {
@@ -163,6 +163,8 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
 
 
     private void init(Context context) {
+        mScroller=new OverScroller(context);
+
         mPaint = new Paint();
         mPaint.setColor(Color.BLACK);
 
@@ -174,7 +176,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
         mGestureDetector = new GestureDetector(context, this);
         mScaleGestureDetector = new ScaleGestureDetector(context, this);
 
-        mScroller = new OverScroller(context);
+//        mScroller = new OverScroller(context);
     }
 
     /**
@@ -183,7 +185,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
     public void reset() {
         rulersHeight = mHeight - 10 * 2;
         topPointY = 10;
-        postInvalidate();
+        invalidate();
     }
 
 
@@ -191,7 +193,13 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         mWidth = MeasureSpec.getSize(widthMeasureSpec);
         mHeight = MeasureSpec.getSize(heightMeasureSpec);
+        int mHeightMode=MeasureSpec.getMode(heightMeasureSpec);
+        if (mHeightMode==MeasureSpec.EXACTLY){
+            LogUtils.i("EXACTLY:width:" + mWidth + ",height" + mHeight);
+        }
+
         rulersHeight = mHeight - 10 * 2;
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -217,7 +225,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
         }
         //画标注
         for (int i = 0; i <= bigCount; i++) {
-            String text = null;
+            String text = "";
             if (rulersValueFormatter != null) {
                 text = rulersValueFormatter.getFormattedValue(i);
             }
@@ -294,7 +302,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
                     blockSelectedIndex = i;
                     invalidate();
                     onRainChunkClickListener.onClick(i, blocks.get(i));
-                    break;
+                    return true;
                 }
             }
         }
@@ -304,6 +312,7 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
 
     @Override
     public boolean onScale(ScaleGestureDetector detector) {
+        LogUtils.i("onScale");
         if (!zoomable)
             return false;
 
@@ -314,33 +323,37 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
 
         //top离开上布局
         if (currentTopPointY >= 10 || currentTopPointY + currentRulersHeight + 10 < mHeight) {
-//            LogUtils.i("top离开上布局");
+            LogUtils.i("top离开上布局");
             topPointY = 10;
             rulersHeight = mHeight - 10 * 2;
         } else if (currentRulersHeight > maxRatio * (mHeight - 20)) {
-//            LogUtils.i("放得太大了");
+            LogUtils.i("放得太大了");
         } else {
+            //进行缩放，拦截滑动事件
             topPointY = currentTopPointY;
             rulersHeight = currentRulersHeight;
-            postInvalidate();
+            invalidate();
+            return true;
         }
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        LogUtils.i("onScroll");
         if (Math.abs(distanceY) > Math.abs(distanceX)) {
             float currentTopPointY = topPointY - distanceY;
             if (currentTopPointY <= 0 && currentTopPointY + rulersHeight >= mHeight) {
                 topPointY = currentTopPointY;
-                postInvalidate();
+                invalidate();
             }
+            //超出边界 禁止滑动
             if (currentTopPointY > 0) {
                 topPointY = 10;
-                postInvalidate();
+                invalidate();
             } else if (currentTopPointY + rulersHeight < mHeight) {
                 topPointY = mHeight - 10 - rulersHeight;
-                postInvalidate();
+                invalidate();
             }
         }
         return false;
@@ -355,24 +368,38 @@ public class RulersView extends View implements GestureDetector.OnGestureListene
     public void onScaleEnd(ScaleGestureDetector detector) {
     }
 
-
     @Override
     public void onLongPress(MotionEvent e) {
     }
 
+    private OverScroller mScroller;
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 //        mScroller.fling(0, (int) e1.getY(), 0, (int)velocityY, 0, 0, 0, 100);
-        LogUtils.i("onFling");
+        float distanceY=e2.getY()-e1.getY();
+        float distanceX=e2.getX()-e1.getX();
+
+//        if (Math.abs(distanceY) > Math.abs(distanceX)) {
+//            float currentTopPointY = topPointY - distanceY;
+//            if (currentTopPointY <= 0 && currentTopPointY + rulersHeight >= mHeight) {
+//                LogUtils.i("onFling");
+////                topPointY = currentTopPointY;
+////                invalidate();
+//                mScroller.fling((int)e2.getX(),(int)e2.getY(),(int)velocityX,(int)velocityY,0,0,(int)-currentTopPointY,
+//                        (int)(mHeight-rulersHeight-currentTopPointY));
+//            }
+//        }
+        LogUtils.i("Fling:"+velocityX+","+velocityY);
         return false;
     }
 
 
-//    @Override
-//    public void computeScroll() {
-//        if (mScroller.computeScrollOffset()) {
-//            scrollTo(0, -mScroller.getCurrY());
-//            postInvalidate();
-//        }
-//    }
+    @Override
+    public void computeScroll() {
+        if (mScroller.computeScrollOffset()) {
+            LogUtils.i("computeScroll");
+            scrollTo(0, -mScroller.getCurrY());
+            invalidate();
+        }
+    }
 }

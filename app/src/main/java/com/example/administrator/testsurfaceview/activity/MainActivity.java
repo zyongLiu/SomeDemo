@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.administrator.testsurfaceview.R;
+import com.example.administrator.testsurfaceview.view.VerticalViewPager;
 
 /**
  * Created by Liu on 2016/11/10.
@@ -20,7 +21,8 @@ import com.example.administrator.testsurfaceview.R;
 public class MainActivity extends Activity{
     private ListView lv;
     private String[] datas=new String[]{"Pulgin","SurfaceView","Touch","RetrofitActivity",
-            "RxJavaActivity","RxJava + Retrofit","Okhttp","RulersViewActivity"};
+            "RxJavaActivity","RxJava + Retrofit","Okhttp","RulersViewActivity","竖直滚动文字",
+    "竖立ViewPager"};
     private MainAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,12 @@ public class MainActivity extends Activity{
                         break;
                     case 7:
                         intent=new Intent(getApplicationContext(),RulersViewActivity.class);
+                        break;
+                    case 8:
+                        intent=new Intent(getApplicationContext(),ScrollActivitiy.class);
+                        break;
+                    case 9:
+                        intent=new Intent(getApplicationContext(),VerticalViewPagerActivity.class);
                         break;
                     default:
 
