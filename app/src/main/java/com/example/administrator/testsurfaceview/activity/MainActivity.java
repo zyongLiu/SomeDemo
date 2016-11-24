@@ -22,7 +22,7 @@ public class MainActivity extends Activity{
     private ListView lv;
     private String[] datas=new String[]{"Pulgin","SurfaceView","Touch","RetrofitActivity",
             "RxJavaActivity","RxJava + Retrofit","Okhttp","RulersViewActivity","竖直滚动文字",
-    "竖立ViewPager"};
+    "竖立ViewPager","PropertyAnimation"};
     private MainAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,9 @@ public class MainActivity extends Activity{
                         break;
                     case 9:
                         intent=new Intent(getApplicationContext(),VerticalViewPagerActivity.class);
+                        break;
+                    case 10:
+                        intent=new Intent(getApplicationContext(),PropertyAnimationActivity.class);
                         break;
                     default:
 

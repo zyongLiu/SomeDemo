@@ -6,10 +6,6 @@ import android.widget.TextView;
 import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.view.MnScaleBar;
 import com.example.administrator.testsurfaceview.view.RulersView;
-import com.sunfusheng.marqueeview.MarqueeView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Liu on 2016/11/15.

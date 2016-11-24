@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp" />
 
-        <com.sunfusheng.marqueeview.MarqueeView
+        <com.example.administrator.testsurfaceview.view.MarqueeView
             android:layout_marginTop="30dp"
             android:layout_marginLeft="4dp"
             android:id="@+id/marqueeView"

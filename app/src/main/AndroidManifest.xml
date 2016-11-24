@@ -28,6 +28,7 @@
         <activity android:name=".activity.RulersViewActivity"/>
         <activity android:name=".activity.ScrollActivitiy"/>
         <activity android:name=".activity.VerticalViewPagerActivity"/>
+        <activity android:name=".activity.PropertyAnimationActivity"/>
     </application>
 
 </manifest>
