@@ -2111,7 +2111,7 @@ public class VerticalViewPager extends ViewGroup {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw the margin drawable between pages if needed.
+        // DrawBoardActivity the margin drawable between pages if needed.
         if (mPageMargin > 0 && mMarginDrawable != null && mItems.size() > 0 && mAdapter != null) {
             final int scrollY = getScrollY();
             final int height = getHeight();

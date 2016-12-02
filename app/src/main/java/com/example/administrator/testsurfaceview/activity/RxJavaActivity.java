@@ -263,6 +263,5 @@ public class RxJavaActivity extends Activity {
                         LogUtils.i("onNext:" + s);
                     }
                 });  // Android 主线程，由 observeOn() 指定
-
     }
 }
