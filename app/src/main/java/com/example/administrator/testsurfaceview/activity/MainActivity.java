@@ -6,12 +6,14 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.utils.DisplayUtil;
+import com.example.administrator.testsurfaceview.utils.LogUtils;
 import com.example.administrator.testsurfaceview.view.VerticalViewPager;
 
 /**
@@ -141,6 +144,14 @@ public class MainActivity extends Activity {
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         img.setImageResource(R.drawable.guide);
 
+        img.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                LogUtils.i("坐标:"+event.getX()+","+event.getY());
+                return false;
+            }
+        });
+
         // 设置LayoutParams参数
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         // 设置显示的类型，TYPE_PHONE指的是来电话的时候会被覆盖，其他时候会在最前端，显示位置在stateBar下面，其他更多的值请查阅文档
@@ -153,8 +164,30 @@ public class MainActivity extends Activity {
         params.width = DisplayUtil.getWindowWidth(this);
         params.height = DisplayUtil.getWindowHeight(this);
 
+
         // 添加到当前的窗口上
         windowManager.addView(img, params);
+
+//        Button button=new Button(this);
+//        button.setText("click");
+
+        params.x=360;
+        params.y=555;
+
+        params.width = 200;
+        params.height = 100;
+
+//        params.gravity=Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM;
+
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                windowManager.removeView(img);
+//            }
+//        });
+//
+//
+//        windowManager.addView(button,params);
 
         // 点击图层之后，将图层移除
         img.setOnClickListener(new View.OnClickListener() {

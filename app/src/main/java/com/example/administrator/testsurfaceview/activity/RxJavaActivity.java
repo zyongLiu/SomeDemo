@@ -10,12 +10,15 @@ import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.bean.Student;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -226,10 +229,17 @@ public class RxJavaActivity extends Activity {
 //                LogUtils.i(s);
 //            }
 //        });
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Observable.timer(4, TimeUnit.SECONDS).subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
 
+            }
+        });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
         Observable.just(1, 2, 3, 4) // IO 线程，由 subscribeOn() 指定
                 .subscribeOn(Schedulers.io())
+
                 .observeOn(Schedulers.newThread())
                 .map(new Func1<Integer, String>() {
                     @Override
@@ -260,7 +270,7 @@ public class RxJavaActivity extends Activity {
 
                     @Override
                     public void onNext(String s) {
-                        LogUtils.i("onNext:" + s);
+                        LogUtils.i("onNext:" + s+","+Thread.currentThread().getName());
                     }
                 });  // Android 主线程，由 observeOn() 指定
     }
