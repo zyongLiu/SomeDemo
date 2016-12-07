@@ -1,10 +1,12 @@
 package com.example.administrator.testsurfaceview.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.bean.MovieEntity;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
@@ -31,7 +33,7 @@ import retrofit2.http.Query;
 /**
  * Created by Liu on 2016/11/11.
  */
-public class RetrofitActivity extends Activity{
+public class RetrofitActivity extends Activity {
     @BindView(R.id.click_me_BN)
     Button clickMeBN;
     @BindView(R.id.result_TV)
@@ -56,30 +58,28 @@ public class RetrofitActivity extends Activity{
     }
 
     public void getMovie() {
-//        OkHttpClient client=new OkHttpClient();
-//        client.interceptors().add(new Interceptor() {
-//            @Override
-//            public okhttp3.Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request();
-//                long t1 = System.nanoTime();
-//                LogUtils.i(String.format("Sending request %s on %s%n%s",
-//                        request.url(), chain.connection(), request.headers()));
-//
-//                okhttp3.Response response = chain.proceed(request);
-//
-//                long t2 = System.nanoTime();
-//                LogUtils.i(String.format("Received response for %s in %.1fms%n%s",
-//                        response.request().url(), (t2 - t1) / 1e6d, response.headers()));
-//
-//                return response;
-//
-//            }
-//        });
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                long t1 = System.nanoTime();
+                LogUtils.i(String.format("Sending request %s on %s%n%s",
+                        request.url(), chain.connection(), request.headers()));
+
+                okhttp3.Response response = chain.proceed(request);
+
+                long t2 = System.nanoTime();
+                LogUtils.i(String.format("Received response for %s in %.1fms%n%s",
+                        response.request().url(), (t2 - t1) / 1e6d, response.headers()));
+
+                return response;
+            }
+        }).build();
 
 
         String url = "https://api.github.com/repos/typecho-fans/plugins/contents/";
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url)
-//                .client(client)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         MovieService movieService = retrofit.create(MovieService.class);
@@ -97,7 +97,6 @@ public class RetrofitActivity extends Activity{
         });
         call.cancel();
     }
-
 
 
 }

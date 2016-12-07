@@ -10,8 +10,8 @@ public class CrashApplication extends PluginApplication {
 	public void onCreate() {
 		super.onCreate();
 
-		CrashHandler crashHandler = CrashHandler.getInstance();
-		crashHandler.init(getApplicationContext());
+//		CrashHandler crashHandler = CrashHandler.getInstance();
+//		crashHandler.init(getApplicationContext());
 
 
 	}

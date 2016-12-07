@@ -33,9 +33,9 @@ public class MainActivity extends Activity {
     private ImageView img;
 
     private String[] datas = new String[]{
-            "Pulgin", "SurfaceView", "Touch", "RetrofitActivity", "RxJavaActivity",
-            "RxJava + Retrofit", "Okhttp", "RulersViewActivity", "竖直滚动文字", "竖立ViewPager",
-            "属性动画", "Heart", "DrawText","XfermodesActivity","画板"};
+            "Pulgin", "SurfaceView", "Touch", "Okhttp", "RxJava", "Retrofit",
+            "RxJava + Retrofit", "RulersView", "竖直滚动文字", "竖立ViewPager",
+            "属性动画", "Heart", "DrawText", "Xfermodes", "画板"};
     private MainAdapter mAdapter;
 
     @Override
@@ -63,16 +63,16 @@ public class MainActivity extends Activity {
                         intent = new Intent(getApplicationContext(), TouchActivity.class);
                         break;
                     case 3:
-                        intent = new Intent(getApplicationContext(), RetrofitActivity.class);
+                        intent = new Intent(getApplicationContext(), OkhttpActivity.class);
                         break;
                     case 4:
                         intent = new Intent(getApplicationContext(), RxJavaActivity.class);
                         break;
                     case 5:
-                        intent = new Intent(getApplicationContext(), RxReActivity.class);
+                        intent = new Intent(getApplicationContext(), RetrofitActivity.class);
                         break;
                     case 6:
-                        intent = new Intent(getApplicationContext(), OkhttpActivity.class);
+                        intent = new Intent(getApplicationContext(), RxReActivity.class);
                         break;
                     case 7:
                         intent = new Intent(getApplicationContext(), RulersViewActivity.class);
@@ -147,7 +147,7 @@ public class MainActivity extends Activity {
         img.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                LogUtils.i("坐标:"+event.getX()+","+event.getY());
+                LogUtils.i("坐标:" + event.getX() + "," + event.getY());
                 return false;
             }
         });
@@ -171,8 +171,8 @@ public class MainActivity extends Activity {
 //        Button button=new Button(this);
 //        button.setText("click");
 
-        params.x=360;
-        params.y=555;
+        params.x = 360;
+        params.y = 555;
 
         params.width = 200;
         params.height = 100;

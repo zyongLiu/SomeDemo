@@ -33,7 +33,7 @@ public final class Progress {
 
     public void run() throws Exception {
         Request request = new Request.Builder()
-                .url("https://publicobject.com/helloworld.txt")
+                .url("http://static-dl-cn.apowersoft.com/apowersoft-online-launcher.exe?hash=acec72377f3a7cb8e50be46eeaaca6b1.exe")
                 .build();
 
         final ProgressListener progressListener = new ProgressListener() {

@@ -10,6 +10,7 @@ import com.example.administrator.testsurfaceview.R;
 import com.example.administrator.testsurfaceview.bean.Student;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -19,6 +20,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -237,41 +239,96 @@ public class RxJavaActivity extends Activity {
             }
         });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Observable.just(1, 2, 3, 4) // IO 线程，由 subscribeOn() 指定
-                .subscribeOn(Schedulers.io())
+//        Observable.just(1, 2, 3, 4) // IO 线程，由 subscribeOn() 指定
+//                .subscribeOn(Schedulers.io())
+//
+//                .observeOn(Schedulers.newThread())
+//                .map(new Func1<Integer, String>() {
+//                    @Override
+//                    public String call(Integer integer) {
+//                        LogUtils.i("1线程:" + Thread.currentThread().getName());
+//                        return integer + "呵呵";
+//                    }
+//                }) // 新线程，由 observeOn() 指定
+//                .observeOn(Schedulers.io())
+//                .map(new Func1<String, String>() {
+//                    @Override
+//                    public String call(String s) {
+//                        LogUtils.i("2线程:" + Thread.currentThread().getName());
+//                        return "哈哈" + s;
+//                    }
+//                }) // IO 线程，由 observeOn() 指定
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Subscriber<String>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        LogUtils.i("onCompleted");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtils.i("onError:" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(String s) {
+//                        LogUtils.i("onNext:" + s + "," + Thread.currentThread().getName());
+//                    }
+//                });  // Android 主线程，由 observeOn() 指定
+
+///////////////////////////////////////////////////////////
+        Observable.just(1,2,3)
+                .subscribeOn(Schedulers.newThread())
+//                .buffer(1,2)
 
                 .observeOn(Schedulers.newThread())
-                .map(new Func1<Integer, String>() {
+                .flatMap(new Func1<Integer, Observable<String>>() {
                     @Override
-                    public String call(Integer integer) {
-                        LogUtils.i("1线程:" + Thread.currentThread().getName());
-                        return integer + "呵呵";
+                    public Observable<String> call(Integer integer) {
+                        LogUtils.i("第一次flatMap："+Thread.currentThread().getName());
+                        return Observable.just(integer + "").observeOn(Schedulers.io());
                     }
-                }) // 新线程，由 observeOn() 指定
+                })
                 .observeOn(Schedulers.io())
-                .map(new Func1<String, String>() {
+                .flatMap(new Func1<String, Observable<Integer>>() {
                     @Override
-                    public String call(String s) {
-                        LogUtils.i("2线程:" + Thread.currentThread().getName());
-                        return "哈哈" + s;
+                    public Observable<Integer> call(String s) {
+                        LogUtils.i("第二次flatMap："+Thread.currentThread().getName());
+                        return Observable.just(1);
                     }
-                }) // IO 线程，由 observeOn() 指定
-                .observeOn(AndroidSchedulers.mainThread())
+                })
+                .observeOn(Schedulers.computation())
+                .map(new Func1<Integer, List<String>>() {
+                    @Override
+                    public List<String> call(Integer integer) {
+                        LogUtils.i("第三次map："+Thread.currentThread().getName());
+                        return null;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .map(new Func1<List<String>, String>() {
+                    @Override
+                    public String call(List<String> strings) {
+                        LogUtils.i("第四次map："+Thread.currentThread().getName());
+                        return null;
+                    }
+                }).observeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-                        LogUtils.i("onCompleted");
+                        LogUtils.i("onCompleted："+Thread.currentThread().getName());
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtils.i("onError:" + e.getMessage());
+                        e.printStackTrace();
+                        LogUtils.e(e.getMessage());
                     }
 
                     @Override
                     public void onNext(String s) {
-                        LogUtils.i("onNext:" + s+","+Thread.currentThread().getName());
+                        LogUtils.i("第五次map："+Thread.currentThread().getName());
                     }
-                });  // Android 主线程，由 observeOn() 指定
+                });
     }
 }
