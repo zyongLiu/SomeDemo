@@ -11,6 +11,7 @@ import com.example.administrator.testsurfaceview.bean.Student;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
 
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -277,58 +278,91 @@ public class RxJavaActivity extends Activity {
 //                });  // Android 主线程，由 observeOn() 指定
 
 ///////////////////////////////////////////////////////////
-        Observable.just(1,2,3)
-                .subscribeOn(Schedulers.newThread())
-//                .buffer(1,2)
-
+//        Observable.just(1,2,3)
+//                .subscribeOn(Schedulers.newThread())
+////                .buffer(1,2)
+//
+//                .observeOn(Schedulers.newThread())
+//                .flatMap(new Func1<Integer, Observable<String>>() {
+//                    @Override
+//                    public Observable<String> call(Integer integer) {
+//                        LogUtils.i("第一次flatMap："+Thread.currentThread().getName());
+//                        return Observable.just(integer + "").observeOn(Schedulers.io());
+//                    }
+//                })
+//                .observeOn(Schedulers.io())
+//                .flatMap(new Func1<String, Observable<Integer>>() {
+//                    @Override
+//                    public Observable<Integer> call(String s) {
+//                        LogUtils.i("第二次flatMap："+Thread.currentThread().getName());
+//                        return Observable.just(1);
+//                    }
+//                })
+//                .observeOn(Schedulers.computation())
+//                .map(new Func1<Integer, List<String>>() {
+//                    @Override
+//                    public List<String> call(Integer integer) {
+//                        LogUtils.i("第三次map："+Thread.currentThread().getName());
+//                        return null;
+//                    }
+//                })
+//                .observeOn(Schedulers.io())
+//                .map(new Func1<List<String>, String>() {
+//                    @Override
+//                    public String call(List<String> strings) {
+//                        LogUtils.i("第四次map："+Thread.currentThread().getName());
+//                        return null;
+//                    }
+//                }).observeOn(Schedulers.newThread())
+//                .subscribe(new Subscriber<String>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        LogUtils.i("onCompleted："+Thread.currentThread().getName());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//                        LogUtils.e(e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(String s) {
+//                        LogUtils.i("第五次map："+Thread.currentThread().getName());
+//                    }
+//                });
+//////////////////////////////////////////////////
+        Observable.just(1, 2)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .map(new Func1<Integer, String>() {
+                    @Override
+                    public String call(Integer integer) {
+                        LogUtils.i(Thread.currentThread().getName() + integer);
+                        return integer + "ge";
+                    }
+                })
                 .observeOn(Schedulers.newThread())
-                .flatMap(new Func1<Integer, Observable<String>>() {
+                .compose(new Observable.Transformer<String, String>() {
                     @Override
-                    public Observable<String> call(Integer integer) {
-                        LogUtils.i("第一次flatMap："+Thread.currentThread().getName());
-                        return Observable.just(integer + "").observeOn(Schedulers.io());
+                    public Observable<String> call(Observable<String> stringObservable) {
+                        return stringObservable.map(new Func1<String, String>() {
+                            @Override
+                            public String call(String s) {
+                                LogUtils.i(Thread.currentThread().getName() + s);
+                                return s + "compose";
+                            }
+                        });
                     }
                 })
-                .observeOn(Schedulers.io())
-                .flatMap(new Func1<String, Observable<Integer>>() {
+                .observeOn(Schedulers.newThread())
+                .subscribe(new Action1<String>() {
                     @Override
-                    public Observable<Integer> call(String s) {
-                        LogUtils.i("第二次flatMap："+Thread.currentThread().getName());
-                        return Observable.just(1);
-                    }
-                })
-                .observeOn(Schedulers.computation())
-                .map(new Func1<Integer, List<String>>() {
-                    @Override
-                    public List<String> call(Integer integer) {
-                        LogUtils.i("第三次map："+Thread.currentThread().getName());
-                        return null;
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .map(new Func1<List<String>, String>() {
-                    @Override
-                    public String call(List<String> strings) {
-                        LogUtils.i("第四次map："+Thread.currentThread().getName());
-                        return null;
-                    }
-                }).observeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-                        LogUtils.i("onCompleted："+Thread.currentThread().getName());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        LogUtils.e(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        LogUtils.i("第五次map："+Thread.currentThread().getName());
+                    public void call(String s) {
+                        LogUtils.i(Thread.currentThread().getName() + s);
+                        LogUtils.i(s);
                     }
                 });
+
     }
 }

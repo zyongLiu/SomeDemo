@@ -3,15 +3,25 @@ package com.example.administrator.testsurfaceview.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
+import android.widget.Toast;
 
+import com.example.administrator.testsurfaceview.bean.Message;
 import com.example.administrator.testsurfaceview.utils.LogUtils;
+import com.example.administrator.testsurfaceview.utils.OkHttp3Downloader;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.log.LoggerInterceptor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -26,7 +36,48 @@ public class OkhttpActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        testDownLoad();
+
+//        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//                .addInterceptor(new LoggerInterceptor("TAG"))
+//                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+//                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+//                .cache(new Cache(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/atest")
+//                        ,10*1024*1024))
+//                .build();
+//
+//        OkHttpUtils.initClient(okHttpClient);
+//
+//        Picasso picasso = new Picasso.Builder(this)
+//                .downloader(new OkHttp3Downloader(okHttpClient))
+//                .build();
+//        Picasso.setSingletonInstance(picasso);
+
+
+//        testDownLoad();
+
+        testText();
+    }
+
+    private void testText() {
+        OkHttpUtils.get().url("http://192.168.1.128/test/update-text.txt").build().execute(new com.zhy.http.okhttp.callback.Callback<Message>() {
+
+            @Override
+            public Message parseNetworkResponse(Response response, int id) throws Exception {
+                Gson gson = new Gson();
+                return gson.fromJson(response.body().string(), Message.class);
+            }
+
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onResponse(Message response, int id) {
+                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 
     private void testDownLoad() {
@@ -48,16 +99,16 @@ public class OkhttpActivity extends Activity {
             }
         })
                 .addNetworkInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response originalResponse = chain.proceed(chain.request());
-                LogUtils.i("just test");
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Response originalResponse = chain.proceed(chain.request());
+                        LogUtils.i("just test");
 //                return originalResponse.newBuilder()
 //                        .body(new ProgressResponseBody(originalResponse.body(), progressListener))
 //                        .build();
-                return originalResponse;
-            }
-        })
+                        return originalResponse;
+                    }
+                })
                 .build();
         String url = "http://192.168.1.144/HB/MOSAICHREF000.20161021.001000.png";
         Request request = new Request.Builder().url(url).build();

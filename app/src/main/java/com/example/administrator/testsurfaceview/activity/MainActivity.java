@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
     private String[] datas = new String[]{
             "Pulgin", "SurfaceView", "Touch", "Okhttp", "RxJava", "Retrofit",
             "RxJava + Retrofit", "RulersView", "竖直滚动文字", "竖立ViewPager",
-            "属性动画", "Heart", "DrawText", "Xfermodes", "画板"};
+            "属性动画", "Heart", "DrawText", "Xfermodes", "画板","RxBus"};
     private MainAdapter mAdapter;
 
     @Override
@@ -97,6 +97,9 @@ public class MainActivity extends Activity {
                         break;
                     case 14:
                         intent = new Intent(getApplicationContext(), DrawBoardActivity.class);
+                        break;
+                    case 15:
+                        intent = new Intent(getApplicationContext(), RxBusActivity.class);
                         break;
                     default:
 

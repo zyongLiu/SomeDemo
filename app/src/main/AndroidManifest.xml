@@ -33,6 +33,7 @@
         <activity android:name=".activity.TextTestActivity"  android:hardwareAccelerated="false"/>
         <activity android:name=".activity.XfermodesActivity"/>
         <activity android:name=".activity.DrawBoardActivity" android:hardwareAccelerated="false"/>
+        <activity android:name=".activity.RxBusActivity"/>
     </application>
 
 </manifest>

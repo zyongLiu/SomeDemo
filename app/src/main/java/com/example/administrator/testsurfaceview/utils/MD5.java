@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
  * Created by Administrator on 2016/10/26.
  */
 public class MD5 {
+
     public static String getMD5(String val) throws NoSuchAlgorithmException {
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         md5.update(val.getBytes());
